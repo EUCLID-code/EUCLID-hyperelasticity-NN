@@ -1,0 +1,6 @@
+core/__pycache__/
+results/
+*.pyc
+*.png
+*.pdf
+*.pth

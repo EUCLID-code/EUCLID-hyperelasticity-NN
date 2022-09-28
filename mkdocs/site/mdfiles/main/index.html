@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://euclid-code.github.io/mdfiles/main/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>drivers/main - NN-EUCLID / Hyperelasticity</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "drivers/main";
+        var mkdocs_page_input_path = "mdfiles\\main.md";
+        var mkdocs_page_url = "/mdfiles/main/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> NN-EUCLID / Hyperelasticity
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../publication/">Publication</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../Example/">Example</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../code_data/">Code / Data</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Code</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">core/features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../loadFemData/">core/loadFemData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../utilities/">core/utilities</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">drivers/config</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">drivers/main</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../model/">drivers/model</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../train/">drivers/train</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../post_process/">drivers/post_process</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">NN-EUCLID / Hyperelasticity</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Code &raquo;</li><li>drivers/main</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mainpy">main.py</h1>
+<p>This is the main file to train the ICNN-based material model.</p>
+<p>The arguments to run the file are:</p>
+<ul>
+<li><code>&lt;fem_material&gt;</code> - can be any one of the following: <code>NeoHookean</code>, <code>Isihara</code>, <code>HainesWilson</code>, <code>GentThomas</code>, <code>ArrudaBoyce</code>, <code>Ogden</code>, <code>Anisotropy45</code>, <code>Anisotropy60</code>, <code>Holzapfel</code></li>
+<li><code>&lt;noise_material&gt;</code> - noise conditioning of the data (can be <code>low</code> or <code>high</code>)</li>
+</ul>
+<p>The individual components of the main file are the following:</p>
+<ul>
+<li>Reads the command line arguments <code>&lt;fem_material&gt;</code> and <code>&lt;noise_material&gt;</code> and loads the datasets accordingly.</li>
+<li>Initializes ICNN model and assigns randomly sampled weights and biases to it (sampled via <code>xavier_uniform</code>)</li>
+<li>Trains a number of ICNNs (equal to <code>ensemble_size</code> defined in <code>config.py</code>) each with randomly initialized weights.</li>
+<li>Saves each model to the output directory defined in <code>config.py</code>.</li>
+<li>Once all models are trained <code>evaluate_icnn()</code> is called to evaluate each ICNN in the ensemble and plot the performance against the ground truth model along six deformation paths.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../config/" class="btn btn-neutral float-left" title="drivers/config"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../model/" class="btn btn-neutral float-right" title="drivers/model">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../config/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../model/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../javascripts/mathjax.js" defer></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
