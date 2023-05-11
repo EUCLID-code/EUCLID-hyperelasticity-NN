@@ -64,6 +64,6 @@ It is based on the work published [in the Journal of Mechancis and Physics of So
  * [Prakash Thakolkaran](https://www.mech-mat.com/people#h.sqzfck889r1k),
  * [Akshay Joshi](https://www.mech-mat.com/people#h.sqzfck889r1),
  * [Yiwen Zheng](https://sites.google.com/site/aniruddhvashisth123/people?authuser=0#h.g0otpf1xivt2),
- * [Moritz Flaschel](https://compmech.ethz.ch/the-group/person-detail.flaschel.html),
+ * [Moritz Flaschel](https://scholar.google.com/citations?user=v-zgg-QAAAAJ&hl=de),
  * [Laura De Lorenzis](https://compmech.ethz.ch/the-group/people/principal-investigator.html),
  * [Siddhant Kumar](https://www.mech-mat.com/people#h.c3j1wfapt4wa).
