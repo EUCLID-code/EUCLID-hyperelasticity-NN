@@ -40,8 +40,8 @@ def loadFemData(path, noiseLevel = 0., noiseType = 'displacement', denoisedDispl
     df = pd.read_csv(path+'/output_nodes.csv',dtype=np.float64)
 
     if 'ux_orig' in df.columns and 'uy_orig' in df.columns:
-        df.ux[df.bcx!=0] = df.ux_orig[df.bcx!=0]
-        df.uy[df.bcy!=0] = df.uy_orig[df.bcy!=0]
+        df.loc[df.bcx != 0, 'ux'] = df.loc[df.bcx != 0, 'ux_orig']
+        df.loc[df.bcy != 0, 'uy'] = df.loc[df.bcy != 0, 'uy_orig']
 
     numNodes = df.shape[0]
     x_nodes = torch.tensor(df[['x','y']].values)
