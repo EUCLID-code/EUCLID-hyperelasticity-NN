@@ -23,7 +23,7 @@ class convexLinear(torch.nn.Module):
 		self.weights = torch.nn.Parameter(weights)
 
 		# initialize weights
-		torch.nn.init.kaiming_uniform_(self.weights, a=np.math.sqrt(5))
+		torch.nn.init.kaiming_uniform_(self.weights, a=np.sqrt(5))
 
 	def forward(self, x):
 		w_times_x= torch.mm(x, torch.nn.functional.softplus(self.weights.t()))
